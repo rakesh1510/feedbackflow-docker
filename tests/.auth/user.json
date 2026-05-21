@@ -1,0 +1,15 @@
+{
+  "cookies": [
+    {
+      "name": "ff_session",
+      "value": "236db63fe76059271f7391781581836a",
+      "domain": "187.77.184.173",
+      "path": "/",
+      "expires": 1781264138.533931,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

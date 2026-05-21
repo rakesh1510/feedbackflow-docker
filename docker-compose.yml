@@ -1,0 +1,29 @@
+
+services:
+  app:
+    build: .
+    container_name: feedbackflow_app
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: feedbackflow_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "Romil@15101990!1319"
+      MYSQL_DATABASE: "feedbackflow_master"
+      MYSQL_USER: "pmaadmin"
+      MYSQL_PASSWORD: "Romil@15101990!1319"
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+volumes:
+  db_data:

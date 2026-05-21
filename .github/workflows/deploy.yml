@@ -1,0 +1,44 @@
+
+name: Deploy FeedbackFlow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            set -e
+
+            PROJECT_DIR="/var/www/html/feedbackflow"
+            REPO_URL="https://github.com/rakesh1510/feedbackflow-app.git"
+
+            if [ ! -d "$PROJECT_DIR/.git" ]; then
+              rm -rf "$PROJECT_DIR"
+              git clone "$REPO_URL" "$PROJECT_DIR"
+            fi
+
+            cd "$PROJECT_DIR"
+            git fetch origin main
+            git reset --hard origin/main
+
+            find "$PROJECT_DIR" -type d -exec chmod 755 {} \;
+            find "$PROJECT_DIR" -type f -exec chmod 644 {} \;
+
+            if [ -d "$PROJECT_DIR/uploads" ]; then
+              chmod -R 775 "$PROJECT_DIR/uploads"
+            fi
+
+            echo "Deployment finished"
